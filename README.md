@@ -4,13 +4,14 @@
 [![Dart](https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
 [![2º DAM](https://img.shields.io/badge/2º_DAM-Programación_Móvil-orange?style=for-the-badge)](https://www.todofp.es)
 
-Aplicación móvil desarrollada en **Flutter** para el módulo de **Programación Móvil** (2º DAM - Unidad Didáctica 02). 
+Aplicación móvil desarrollada en **Flutter** para el módulo de **Programación Móvil** (2º DAM - Unidad Didáctica 02).
 
 La app consume la API pública de Star Wars ([`https://akabab.github.io/starwars-api/api/`](https://akabab.github.io/starwars-api/api/)), permitiendo listar personajes del universo Star Wars y ver la ficha técnica detallada de cada uno de ellos con traducción de términos y estética temática.
 
 ---
 
 ## 📋 Índice
+
 1. [Guía Paso a Paso: Descargar desde GitHub y arrancar el proyecto](#-guía-paso-a-paso-descargar-desde-github-y-arrancar-el-proyecto)
 2. [Documentación para la Entrega: Catálogo de Widgets y Layout](#-documentación-para-la-entrega-catálogo-de-widgets-y-layout)
 3. [Características Principales](#-características-principales)
@@ -56,8 +57,9 @@ Esta guía está diseñada paso a paso utilizando la interfaz gráfica (sin nece
 ### Paso 4: Descargar las dependencias desde Visual Studio Code
 
 1. Nada más abrir la carpeta, VS Code detectará que es un proyecto de Flutter y te mostrará una notificación emergente abajo a la derecha diciendo:
+
    > _"Some packages are missing or out of date. Would you like to get them?"_
-   👉 Pulsa el botón azul **`Get Packages`**.
+   > 👉 Pulsa el botón azul **`Get Packages`**.
 
 2. **Si no te aparece el aviso**:
    - En el explorador de archivos de la izquierda, haz clic sobre el archivo **`pubspec.yaml`** para abrirlo.
@@ -89,9 +91,9 @@ Esta guía está diseñada paso a paso utilizando la interfaz gráfica (sin nece
 ## 📑 Documentación para la Entrega: Catálogo de Widgets y Layout
 
 > **Requisito de la práctica:**  
-> *"Al menos siete distintos, de los del catálogo de la unidad:*  
-> *Container, Row, Text, Icon, Padding, Column, Expanded, Image, IconButton, SizedBox, Scaffold, AppBar, TextField, SafeArea, CircleAvatar, ElevatedButton, TextButton, OutlinedButton.*  
-> *Scaffold y MaterialApp no cuentan: los lleva cualquier app. Cuentan los que has elegido tú para construir tu pantalla."*
+> _"Al menos siete distintos, de los del catálogo de la unidad:_  
+> _Container, Row, Text, Icon, Padding, Column, Expanded, Image, IconButton, SizedBox, Scaffold, AppBar, TextField, SafeArea, CircleAvatar, ElevatedButton, TextButton, OutlinedButton._  
+> _Scaffold y MaterialApp no cuentan: los lleva cualquier app. Cuentan los que has elegido tú para construir tu pantalla."_
 
 ---
 
@@ -99,21 +101,21 @@ Esta guía está diseñada paso a paso utilizando la interfaz gráfica (sin nece
 
 Se han seleccionado e integrado **12 widgets distintos** del catálogo oficial de la unidad (superando ampliamente el mínimo de 7 requeridos), excluyendo `Scaffold` y `MaterialApp`:
 
-| # | Widget del Catálogo | Archivo donde se usa | Uso concreto en la pantalla |
-| :-: | :--- | :--- | :--- |
-| **1** | **`AppBar`** | `home_screen.dart` | Barra de navegación superior con fondo negro, elevación y título temático de Star Wars centrado. |
-| **2** | **`SafeArea`** | `home_screen.dart` | Envuelve el cuerpo del `Scaffold` para proteger el layout frente a barras de estado y *notches* del dispositivo móvil. |
-| **3** | **`CircleAvatar`** | `character_tile_widget.dart` | Muestra la miniatura redondeada de cada personaje en la lista (`ListTile`) o un icono por defecto si no tiene imagen. |
-| **4** | **`IconButton`** | `character_tile_widget.dart` | Botón interactivo con icono de flecha (`trailing`) que activa la navegación al detalle del personaje. |
-| **5** | **`Container`** | `character_detail_widget.dart` | Delimita la ficha o tarjeta visual del personaje con esquinas redondeadas (`borderRadius: 16`), borde ámbar y fondo suavizado. |
-| **6** | **`Column`** | `character_detail_widget.dart` | Organiza verticalmente los elementos de la vista de detalle (foto, nombre, datos y botón) con `mainAxisSize: MainAxisSize.min`. |
-| **7** | **`Row`** | `character_detail_widget.dart` | Dispone horizontalmente los textos de género y especie del personaje con centrado. |
-| **8** | **`Padding`** | `character_detail_widget.dart` | Proporciona un margen interior de 16 píxeles alrededor de la tarjeta para que no colapse contra los bordes de la pantalla. |
-| **9** | **`SizedBox`** | `character_detail_widget.dart` | Elemento espaciador fijo para crear distancias visuales limpias (16px vertical entre secciones y 10px horizontal entre género y especie). |
-| **10** | **`Text`** | En todas las vistas | Muestra textos aplicando estilos (`TextStyle`) con tipografía `StarJedi`, negritas, colores y traducciones al español. |
-| **11** | **`Image`** (`Image.network`) | `character_detail_widget.dart` | Carga la imagen remota a 250px de altura con recorte `BoxFit.cover` y control de fallos mediante `errorBuilder`. |
-| **12** | **`Icon`** | `character_tile_widget.dart` / `character_detail_widget.dart` | Renderiza iconos del catálogo Material (`Icons.person` como avatar/fallback y `Icons.arrow_forward_ios` como flecha). |
-| **13** | **`ElevatedButton`** | `character_detail_widget.dart` | Botón con relieve que invoca el callback `onBack` para devolver al usuario desde el detalle a la lista principal. |
+|   #    | Widget del Catálogo           | Archivo donde se usa                                          | Uso concreto en la pantalla                                                                                                               |
+| :----: | :---------------------------- | :------------------------------------------------------------ | :---------------------------------------------------------------------------------------------------------------------------------------- |
+| **1**  | **`AppBar`**                  | `home_screen.dart`                                            | Barra de navegación superior con fondo negro, elevación y título temático de Star Wars centrado.                                          |
+| **2**  | **`SafeArea`**                | `home_screen.dart`                                            | Envuelve el cuerpo del `Scaffold` para proteger el layout frente a barras de estado y _notches_ del dispositivo móvil.                    |
+| **3**  | **`CircleAvatar`**            | `character_tile_widget.dart`                                  | Muestra la miniatura redondeada de cada personaje en la lista (`ListTile`) o un icono por defecto si no tiene imagen.                     |
+| **4**  | **`IconButton`**              | `character_tile_widget.dart`                                  | Botón interactivo con icono de flecha (`trailing`) que activa la navegación al detalle del personaje.                                     |
+| **5**  | **`Container`**               | `character_detail_widget.dart`                                | Delimita la ficha o tarjeta visual del personaje con esquinas redondeadas (`borderRadius: 16`), borde ámbar y fondo suavizado.            |
+| **6**  | **`Column`**                  | `character_detail_widget.dart`                                | Organiza verticalmente los elementos de la vista de detalle (foto, nombre, datos y botón) con `mainAxisSize: MainAxisSize.min`.           |
+| **7**  | **`Row`**                     | `character_detail_widget.dart`                                | Dispone horizontalmente los textos de género y especie del personaje con centrado.                                                        |
+| **8**  | **`Padding`**                 | `character_detail_widget.dart`                                | Proporciona un margen interior de 16 píxeles alrededor de la tarjeta para que no colapse contra los bordes de la pantalla.                |
+| **9**  | **`SizedBox`**                | `character_detail_widget.dart`                                | Elemento espaciador fijo para crear distancias visuales limpias (16px vertical entre secciones y 10px horizontal entre género y especie). |
+| **10** | **`Text`**                    | En todas las vistas                                           | Muestra textos aplicando estilos (`TextStyle`) con tipografía `StarJedi`, negritas, colores y traducciones al español.                    |
+| **11** | **`Image`** (`Image.network`) | `character_detail_widget.dart`                                | Carga la imagen remota a 250px de altura con recorte `BoxFit.cover` y control de fallos mediante `errorBuilder`.                          |
+| **12** | **`Icon`**                    | `character_tile_widget.dart` / `character_detail_widget.dart` | Renderiza iconos del catálogo Material (`Icons.person` como avatar/fallback y `Icons.arrow_forward_ios` como flecha).                     |
+| **13** | **`ElevatedButton`**          | `character_detail_widget.dart`                                | Botón con relieve que invoca el callback `onBack` para devolver al usuario desde el detalle a la lista principal.                         |
 
 ---
 
@@ -156,6 +158,7 @@ MaterialApp (Configuración global)
 ```
 
 #### Funcionamiento del Layout:
+
 1. **Contenedor Principal (`HomeScreen`)**:
    - `Scaffold` define la estructura fija: el `AppBar` superior con diseño temático y un `body` protegido por `SafeArea`.
    - `FutureBuilder` se encarga de esperar los datos de `CharacterService.getAllCharacters()`. Mientras espera, centra un `CircularProgressIndicator`.
@@ -240,4 +243,4 @@ lib/
 
 - **Ciclo formativo**: 2º DAM (Desarrollo de Aplicaciones Multiplataforma).
 - **Módulo**: Programación Móvil.
-- **Unidad**: UD02 - Flutter y consumo de APIs.
+- **Unidad**: UD02 - Flutter.
