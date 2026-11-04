@@ -35,6 +35,12 @@ class CharacterDetail extends StatelessWidget {
                       character.image,
                       height: 250,
                       fit: BoxFit.cover,
+                      // Headers con User-Agent para evitar el bloqueo 403 Forbidden por parte de CDNs como Wikia/Cloudflare
+                      headers: {
+                        'User-Agent':
+                            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                      },
+                      // Si la URL falla o devuelve un código de error, muestra el icono de reemplazo limpiamente
                       errorBuilder: (context, error, stackTrace) =>
                           Icon(Icons.person, size: 100),
                     )
