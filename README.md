@@ -99,61 +99,58 @@ Esta guía está diseñada paso a paso utilizando la interfaz gráfica (sin nece
 
 ### 1. Widgets seleccionados del catálogo de la unidad
 
-Se han seleccionado e integrado **12 widgets distintos** del catálogo oficial de la unidad (superando ampliamente el mínimo de 7 requeridos), excluyendo `Scaffold` y `MaterialApp`:
+Se han seleccionado e integrado **10 widgets distintos** del catálogo oficial de la unidad (superando el mínimo de 7 requeridos), excluyendo `Scaffold` y `MaterialApp`:
 
 |   #    | Widget del Catálogo           | Archivo donde se usa                                          | Uso concreto en la pantalla                                                                                                               |
 | :----: | :---------------------------- | :------------------------------------------------------------ | :---------------------------------------------------------------------------------------------------------------------------------------- |
 | **1**  | **`AppBar`**                  | `home_screen.dart`                                            | Barra de navegación superior con fondo negro, elevación y título temático de Star Wars centrado.                                          |
 | **2**  | **`SafeArea`**                | `home_screen.dart`                                            | Envuelve el cuerpo del `Scaffold` para proteger el layout frente a barras de estado y _notches_ del dispositivo móvil.                    |
 | **3**  | **`Image`** (`Image.network`) | `character_tile_widget.dart` / `character_detail_widget.dart` | Carga de imagen remota con tamaño controlado, recorte `BoxFit.cover` y control de fallos mediante `errorBuilder`.                         |
-| **4**  | **`IconButton`**              | `character_tile_widget.dart`                                  | Botón interactivo con icono de flecha (`trailing`) que activa la navegación al detalle del personaje.                                     |
-| **5**  | **`Container`**               | `character_detail_widget.dart`                                | Delimita la ficha o tarjeta visual del personaje con esquinas redondeadas (`borderRadius: 16`), borde ámbar y fondo suavizado.            |
-| **6**  | **`Column`**                  | `character_detail_widget.dart`                                | Organiza verticalmente los elementos de la vista de detalle (foto, nombre, datos y botón) con `mainAxisSize: MainAxisSize.min`.           |
-| **7**  | **`Row`**                     | `character_detail_widget.dart`                                | Dispone horizontalmente los textos de género y especie del personaje con centrado.                                                        |
-| **8**  | **`Padding`**                 | `character_detail_widget.dart`                                | Proporciona un margen interior de 16 píxeles alrededor de la tarjeta para que no colapse contra los bordes de la pantalla.                |
-| **9**  | **`SizedBox`**                | `character_detail_widget.dart`                                | Elemento espaciador fijo para crear distancias visuales limpias (16px vertical entre secciones y 10px horizontal entre género y especie). |
-| **10** | **`Text`**                    | En todas las vistas                                           | Muestra textos aplicando estilos (`TextStyle`) con tipografía `StarJedi`, negritas, colores y traducciones al español.                    |
-| **11** | **`Icon`**                    | `character_tile_widget.dart` / `character_detail_widget.dart` | Renderiza iconos del catálogo Material (`Icons.person` como avatar/fallback y `Icons.arrow_forward_ios` como flecha).                     |
-| **12** | **`ElevatedButton`**          | `character_detail_widget.dart`                                | Botón con relieve que invoca el callback `onBack` para devolver al usuario desde el detalle a la lista principal.                         |
+| **4**  | **`Column`**                  | `home_screen.dart` / `character_detail_widget.dart`           | Organiza verticalmente los elementos de la vista de detalle (foto, nombre, datos y botón) con `mainAxisSize: MainAxisSize.min`.           |
+| **5**  | **`Row`**                     | `character_detail_widget.dart`                                | Dispone horizontalmente los textos de género y especie del personaje con centrado.                                                        |
+| **6**  | **`Padding`**                 | `character_detail_widget.dart`                                | Proporciona un margen interior de 16 píxeles alrededor de la vista de detalle para separarla de los bordes.                               |
+| **7**  | **`SizedBox`**                | `character_detail_widget.dart`                                | Elemento espaciador fijo para crear distancias visuales limpias (16px vertical entre secciones y 10px horizontal entre género y especie). |
+| **8**  | **`Text`**                    | En todas las vistas                                           | Muestra textos aplicando estilos (`TextStyle`) con tipografía `StarJedi`, negritas, colores y traducciones al español.                    |
+| **9**  | **`Icon`**                    | `character_tile_widget.dart` / `character_detail_widget.dart` | Renderiza iconos del catálogo Material (`Icons.person` como avatar/fallback y `Icons.arrow_forward_ios` como flecha).                     |
+| **10** | **`ElevatedButton`**          | `home_screen.dart`                                            | Botón con relieve que devuelve al usuario desde el detalle a la lista principal (`personajeAPintar = -1`).                                |
 
 ---
 
 ### 2. Estructuración del Layout de la Vista
 
-El diseño de la vista se estructura en dos niveles: un contenedor global reactivo y un gestor dinámico de pantallas alternas:
+El diseño de la vista se estructura desde `HomeScreen` (`StatefulWidget`) apoyándose en widgets `StatelessWidget` puros (`CharacterTile` y `CharacterDetail`):
 
 ```text
 MaterialApp (Configuración global)
- └── HomeScreen (Scaffold)
+ └── HomeScreen (StatefulWidget - Scaffold)
       ├── AppBar (Título "STAR WARS" con fuente StarJedi y color ámbar)
       └── body: SafeArea
            └── Center
                 └── FutureBuilder<List<Character>>
                      ├── [Cargando] ➔ CircularProgressIndicator
-                     ├── [Error]    ➔ Padding ➔ Text(Error)
-                     └── [Éxito]    ➔ CharacterList (StatefulWidget)
-                                         │
-                                         ├── Si personajeAPintar == -1: VISTA LISTA
-                                         │    └── ListView.builder
-                                         │         └── CharacterTile (ListTile)
-                                         │              ├── leading: Image.network / Icon(Icons.person)
-                                         │              ├── title: Text(nombre)
-                                         │              ├── subtitle: Text(género)
-                                         │              └── trailing: IconButton(Icon(flecha))
-                                         │
-                                         └── Si personajeAPintar != -1: VISTA DETALLE
-                                              └── CharacterDetail
-                                                   └── Center
-                                                        └── Padding
-                                                             └── Container (Tarjeta con borde)
-                                                                  └── Column (Vertical)
-                                                                       ├── Image.network (Foto grande)
-                                                                       ├── SizedBox (Separación)
-                                                                       ├── Text (Nombre en negrita)
-                                                                       ├── SizedBox (Separación)
-                                                                       ├── Row (Horizontal: Género + Especie)
-                                                                       ├── SizedBox (Separación)
-                                                                       └── ElevatedButton ("Volver")
+                     └── [Éxito]
+                          │
+                          ├── Si personajeAPintar == -1: VISTA LISTA
+                          │    └── ListView.builder
+                          │         └── GestureDetector (onTap -> cambia personajeAPintar)
+                          │              └── CharacterTile (StatelessWidget - ListTile)
+                          │                   ├── leading: Image.network / Icon(Icons.person)
+                          │                   ├── title: Text(nombre)
+                          │                   ├── subtitle: Text(género)
+                          │                   └── trailing: Icon(flecha)
+                          │
+                          └── Si personajeAPintar != -1: VISTA DETALLE
+                               └── Center
+                                    └── Column
+                                         ├── CharacterDetail (StatelessWidget)
+                                         │    └── Padding
+                                         │         └── Column (Vertical)
+                                         │              ├── Image.network (Foto grande)
+                                         │              ├── SizedBox (Separación)
+                                         │              ├── Text (Nombre en negrita)
+                                         │              ├── SizedBox (Separación)
+                                         │              └── Row (Horizontal: Género + Especie)
+                                         └── ElevatedButton ("Volver" -> personajeAPintar = -1)
 ```
 
 #### Funcionamiento del Layout:
@@ -161,20 +158,19 @@ MaterialApp (Configuración global)
 1. **Contenedor Principal (`HomeScreen`)**:
    - `Scaffold` define la estructura fija: el `AppBar` superior con diseño temático y un `body` protegido por `SafeArea`.
    - `FutureBuilder` se encarga de esperar los datos de `CharacterService.getAllCharacters()`. Mientras espera, centra un `CircularProgressIndicator`.
-2. **Layout de Lista (`CharacterList` con `personajeAPintar == -1`)**:
-   - El espacio se aprovecha con un `ListView.builder` que renderiza de forma eficiente y bajo demanda cada `CharacterTile`.
-   - Cada fila utiliza `ListTile` estructurando: imagen remota o icono (`Image.network` / `Icon`) a la izquierda, textos (`Text`) en el centro y botón con icono (`IconButton`) a la derecha.
-3. **Layout de Detalle (`CharacterList` con `personajeAPintar != -1`)**:
-   - Al pulsar un personaje, se actualiza el estado (`personajeAPintar = index; setState()`).
-   - El layout cambia automáticamente a una tarjeta centrada (`Center` ➔ `Padding` ➔ `Container`).
-   - La disposición vertical se realiza con `Column(mainAxisSize: MainAxisSize.min)` para adaptarse al contenido exacto, combinando una imagen de gran tamaño, textos informativos en `Row` y el botón `ElevatedButton` para regresar a la lista (`personajeAPintar = -1`).
+2. **Layout de Lista (`personajeAPintar == -1`)**:
+   - El espacio se aprovecha con un `ListView.builder` que renderiza de forma eficiente cada fila envolviendo `CharacterTile` en un `GestureDetector`.
+   - `CharacterTile` (`StatelessWidget`) solo recibe el objeto `Character` y estructura el `ListTile`: imagen remota o icono (`Image.network` / `Icon`) a la izquierda, textos (`Text`) en el centro e icono de flecha (`Icon`) a la derecha.
+3. **Layout de Detalle (`personajeAPintar != -1`)**:
+   - Al pulsar un personaje en el `GestureDetector`, se actualiza el estado (`personajeAPintar = index; setState(() {})`).
+   - El layout muestra una `Column` centrada con el widget `CharacterDetail` (`StatelessWidget` que solo recibe el objeto `Character`) y debajo un `ElevatedButton("Volver")` que al pulsarse restablece `personajeAPintar = -1`.
 
 ---
 
 ## 🌟 Características Principales
 
 - **Consumo de API REST**: Descarga asíncrona de los personajes mediante el paquete `http` con control de estados HTTP.
-- **Manejo de Estados Asíncronos (`FutureBuilder`)**: Indicador de progreso (`CircularProgressIndicator`), gestión de errores de conexión y control de listas vacías.
+- **Manejo de Estados Asíncronos (`FutureBuilder`)**: Indicador de progreso (`CircularProgressIndicator`) y control de listas vacías.
 - **Estética Temática de Star Wars**: Barra superior (`AppBar`) estilizada con la tipografía oficial `StarJedi` y paleta de colores oscuro y amarillo ámbar.
 - **Listado Dinámico (`ListView.builder`)**:
   - Miniatura del personaje con gestor de errores de red (`errorBuilder`).
@@ -187,7 +183,7 @@ MaterialApp (Configuración global)
   - Género y especie traducidos al español.
   - Botón de retorno al listado.
 - **Traducciones**: Módulo de traducción para normalizar valores en inglés a español (género y especie).
-- **Código Modularizado**: Componentes separados de manera independiente dentro de la carpeta `widgets/`.
+- **Código Modularizado**: Componentes `StatelessWidget` separados de manera independiente dentro de la carpeta `widgets/`.
 
 ---
 
@@ -204,11 +200,10 @@ lib/
 │   └── character_service.dart              # Peticiones HTTP a la API de Star Wars
 ├── presentation/
 │   ├── screens/
-│   │   └── home_screen.dart                # Pantalla principal (AppBar + FutureBuilder)
+│   │   └── home_screen.dart                # Pantalla principal (StatefulWidget: AppBar + FutureBuilder)
 │   └── widgets/
-│       ├── character_tile_widget.dart      # Item individual de la lista (ListTile)
-│       ├── character_detail_widget.dart    # Vista de detalle de un personaje
-│       └── character_list_widget.dart      # Lista de personajes y gestor de selección
+│       ├── character_tile_widget.dart      # Item individual de la lista (StatelessWidget)
+│       └── character_detail_widget.dart    # Vista de detalle de un personaje (StatelessWidget)
 └── utils/
     └── traducciones_utils.dart             # Utilidades de traducción de términos
 ```

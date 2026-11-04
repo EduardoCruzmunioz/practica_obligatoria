@@ -1,11 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:practica_obligatoria/models/character_model.dart';
-import 'package:practica_obligatoria/presentation/widgets/character_list_widget.dart';
+import 'package:practica_obligatoria/presentation/widgets/character_detail_widget.dart';
+import 'package:practica_obligatoria/presentation/widgets/character_tile_widget.dart';
 import 'package:practica_obligatoria/services/character_service.dart';
 
-// Pantalla principal que contiene la vista general de la aplicación
-class HomeScreen extends StatelessWidget {
+// Pantalla principal con estado (StatefulWidget) para gestionar qué personaje se muestra
+class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  // Índice del personaje seleccionado (-1 indica que se muestra la lista completa)
+  int personajeAPintar = -1;
+
+  // Guardamos la petición futura para no volver a descargar los datos al usar setState
+  final Future<List<Character>> futurePersonajes =
+      CharacterService.getAllCharacters();
 
   @override
   Widget build(BuildContext context) {
@@ -24,26 +37,16 @@ class HomeScreen extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Color.fromARGB(255, 0, 0, 0),
       ),
-      // [SafeArea]: Asegura que el contenido respete las zonas seguras del dispositivo (notch, barra de estado)
+      // [SafeArea]: Asegura que el contenido respete las zonas seguras del dispositivo
       body: SafeArea(
         child: Center(
           // FutureBuilder escucha el estado de la petición asíncrona a la API
           child: FutureBuilder<List<Character>>(
-            future: CharacterService.getAllCharacters(),
+            future: futurePersonajes,
             builder: (context, snapshot) {
               // Mientras la petición está en curso, mostramos un indicador de carga
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return CircularProgressIndicator();
-              }
-
-              // Si ocurrió un error en la llamada HTTP, lo mostramos en pantalla
-              if (snapshot.hasError) {
-                debugPrint('ERROR: ${snapshot.error}');
-                debugPrint('STACK: ${snapshot.stackTrace}');
-                return Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Text('Error: ${snapshot.error}'),
-                );
               }
 
               // Obtenemos los personajes recibidos
@@ -54,8 +57,36 @@ class HomeScreen extends StatelessWidget {
                 return Text('La lista llegó vacía');
               }
 
-              // Pintamos la lista de personajes utilizando nuestro widget modularizado
-              return CharacterList(personajes: lista);
+              // Si no hay personaje seleccionado (-1), mostramos la lista; si no, mostramos el detalle
+              return (personajeAPintar == -1)
+                  ? ListView.builder(
+                      itemCount: lista.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return GestureDetector(
+                          onTap: () {
+                            personajeAPintar = index;
+                            setState(() {});
+                          },
+                          child: CharacterTile(character: lista[index]),
+                        );
+                      },
+                    )
+                  : Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CharacterDetail(character: lista[personajeAPintar]),
+                          // [ElevatedButton]: Botón para volver a la lista principal
+                          ElevatedButton(
+                            onPressed: () {
+                              personajeAPintar = -1;
+                              setState(() {});
+                            },
+                            child: Text('Volver'),
+                          ),
+                        ],
+                      ),
+                    );
             },
           ),
         ),
