@@ -6,85 +6,29 @@
 
 Aplicación móvil desarrollada en **Flutter** para el módulo de **Programación Móvil** (2º DAM - Unidad Didáctica 02).
 
-La app consume la API pública de Star Wars ([`https://akabab.github.io/starwars-api/api/`](https://akabab.github.io/starwars-api/api/)), permitiendo listar personajes del universo Star Wars y ver la ficha técnica detallada de cada uno de ellos con traducción de términos y estética temática.
+La app consume la API pública de Star Wars ([`https://akabab.github.io/starwars-api/api/all.json`](https://akabab.github.io/starwars-api/api/all.json)), mostrando los tres estados de red (**Cargando**, **Con datos** y **Error**), permitiendo listar los personajes del universo Star Wars y consultar la ficha completa de cada uno con su foto, datos e indicadores.
 
 ---
 
 ## 📋 Índice
 
-1. [Guía Paso a Paso: Descargar desde GitHub y arrancar el proyecto](#-guía-paso-a-paso-descargar-desde-github-y-arrancar-el-proyecto)
+1. [Capturas de los Tres Estados de la Pantalla](#-capturas-de-los-tres-estados-de-la-pantalla)
 2. [Documentación para la Entrega: Catálogo de Widgets y Layout](#-documentación-para-la-entrega-catálogo-de-widgets-y-layout)
-3. [Características Principales](#-características-principales)
+3. [Preguntas Clave para la Defensa Oral](#-preguntas-clave-para-la-defensa-oral)
 4. [Estructura del Proyecto (`lib/`)](#-estructura-del-proyecto-lib)
-5. [Tecnologías y Dependencias](#-tecnologías-y-dependencias)
-6. [Solución de Problemas Frecuentes](#-solución-de-problemas-frecuentes)
+5. [Guía Paso a Paso: Descargar desde GitHub y arrancar el proyecto](#-guía-paso-a-paso-descargar-desde-github-y-arrancar-el-proyecto)
+6. [Tecnologías y Dependencias](#-tecnologías-y-dependencias)
 
 ---
 
-## 📥 Guía Paso a Paso: Descargar desde GitHub y arrancar el proyecto
+## 📸 Capturas de los Tres Estados de la Pantalla
 
-Esta guía está diseñada paso a paso utilizando la interfaz gráfica (sin necesidad de comandos de Git por consola).
+La aplicación gestiona las tres situaciones posibles de una pantalla que solicita datos por red (`cargando`, `con datos` y `error`) lanzando la petición en `initState()` y actualizando la interfaz mediante `setState()`:
 
----
-
-### Paso 1: Descargar el proyecto desde la web de GitHub
-
-1. Entra en el enlace de este repositorio en tu navegador web.
-2. En la página principal, busca y haz clic en el botón verde que dice **`<> Code`** (situado en la parte superior derecha, encima de la lista de archivos).
-3. En el menú desplegable que aparece, haz clic en la opción **`Download ZIP`**.
-4. El archivo comprimido (ejemplo: `practica_obligatoria-main.zip`) comenzará a descargarse en tu ordenador.
-
----
-
-### Paso 2: Descomprimir el archivo en tu equipo
-
-1. Ve a tu carpeta de **Descargas** (o donde se haya guardado el archivo).
-2. Haz clic derecho sobre el archivo `.zip` descargado y selecciona **`Extraer todo...`** (o utiliza programas como 7-Zip / WinRAR).
-3. Elige la carpeta donde quieras ubicar el proyecto en tu disco duro y pulsa en **`Extraer`**.
-4. _(Comprobación)_: Asegúrate de entrar en la carpeta resultante y verificar que dentro se encuentran directamente la carpeta `lib`, el archivo `pubspec.yaml`, etc.
-
----
-
-### Paso 3: Abrir el proyecto en Visual Studio Code
-
-1. Abre **Visual Studio Code**.
-2. En la barra de menús superior, ve a **`Archivo` (File)** ➔ **`Abrir carpeta...` (Open Folder...)**.
-3. Navega hasta la carpeta descomprimida del proyecto (`practica_obligatoria`) y pulsa **`Seleccionar carpeta`**.
-4. Si te aparece una ventana emergente preguntando _"¿Confías en los autores de los archivos de esta carpeta?"_, pulsa en **"Sí, confío en los autores"**.
-
----
-
-### Paso 4: Descargar las dependencias desde Visual Studio Code
-
-1. Nada más abrir la carpeta, VS Code detectará que es un proyecto de Flutter y te mostrará una notificación emergente abajo a la derecha diciendo:
-
-   > _"Some packages are missing or out of date. Would you like to get them?"_
-   > 👉 Pulsa el botón azul **`Get Packages`**.
-
-2. **Si no te aparece el aviso**:
-   - En el explorador de archivos de la izquierda, haz clic sobre el archivo **`pubspec.yaml`** para abrirlo.
-   - En la esquina superior derecha del editor verás aparecer un icono con una flecha apuntando hacia abajo (**Download / Get Packages**). Haz clic sobre él.
-
----
-
-### Paso 5: Seleccionar el emulador o dispositivo
-
-1. Mira la **barra de estado inferior** de VS Code (la barra azul o morada situada al final de la ventana).
-2. En la esquina inferior derecha verás el nombre de un dispositivo o un texto como `{}` o `No Device` / `Windows (windows)`.
-3. Haz **clic sobre ese texto**: se desplegará un menú en la parte superior de la ventana con los dispositivos disponibles.
-4. Selecciona tu **emulador Android** (por ejemplo, `Pixel...`) o el navegador **Chrome** si prefieres probarlo en web.
-5. Espera unos segundos a que el emulador se inicie y cargue la pantalla principal de Android.
-
----
-
-### Paso 6: Arrancar y ejecutar la aplicación
-
-1. Con el emulador ya abierto en pantalla:
-   - Ve al menú superior de VS Code: **`Ejecutar` (Run)** ➔ **`Iniciar depuración` (Start Debugging)**.
-   - O simplemente presiona la tecla **`F5`** de tu teclado.
-2. Comenzará el proceso de compilación automática en la pestaña _"Consola de depuración"_.
-3. En unos segundos, la aplicación de Star Wars se abrirá automáticamente en la pantalla de tu emulador mostrando la lista interactiva de personajes.
-4. Cualquier cambio que hagas en el código se reflejará al instante gracias al **Hot Reload** (icono del rayo amarillo en la barra flotante de depuración).
+| 1. Estado: Cargando | 2. Estado: Con datos (Lista) | 3. Estado: Con datos (Ficha) | 4. Estado: Error |
+| :---: | :---: | :---: | :---: |
+| `CircularProgressIndicator` mientras llega la respuesta de la API. | Listado de personajes con foto, nombre y género traducido. | Ficha completa del personaje con foto, datos y 3 indicadores (`Expanded`). | Mensaje claro y botón `Reintentar` al fallar la petición o la URL. |
+| <img src="capturas/1_cargando.png" width="210" alt="Estado Cargando"/> | <img src="capturas/2_datos_lista.jpg" width="210" alt="Estado Con datos - Lista"/> | <img src="capturas/3_datos_ficha.jpg" width="210" alt="Estado Con datos - Ficha"/> | <img src="capturas/4_error.png" width="210" alt="Estado Error"/> |
 
 ---
 
@@ -99,137 +43,143 @@ Esta guía está diseñada paso a paso utilizando la interfaz gráfica (sin nece
 
 ### 1. Widgets seleccionados del catálogo de la unidad
 
-Se han seleccionado e integrado **10 widgets distintos** del catálogo oficial de la unidad (superando el mínimo de 7 requeridos), excluyendo `Scaffold` y `MaterialApp`:
+Se han seleccionado e integrado **11 widgets distintos** del catálogo oficial de la unidad (superando el mínimo de 7 requeridos), sin contar `Scaffold` ni `MaterialApp`:
 
-|   #    | Widget del Catálogo           | Archivo donde se usa                                          | Uso concreto en la pantalla                                                                                                               |
-| :----: | :---------------------------- | :------------------------------------------------------------ | :---------------------------------------------------------------------------------------------------------------------------------------- |
-| **1**  | **`AppBar`**                  | `home_screen.dart`                                            | Barra de navegación superior con fondo negro, elevación y título temático de Star Wars centrado.                                          |
-| **2**  | **`SafeArea`**                | `home_screen.dart`                                            | Envuelve el cuerpo del `Scaffold` para proteger el layout frente a barras de estado y _notches_ del dispositivo móvil.                    |
-| **3**  | **`Image`** (`Image.network`) | `character_tile_widget.dart` / `character_detail_widget.dart` | Carga de imagen remota con tamaño controlado, recorte `BoxFit.cover` y control de fallos mediante `errorBuilder`.                         |
-| **4**  | **`Column`**                  | `home_screen.dart` / `character_detail_widget.dart`           | Organiza verticalmente los elementos de la vista de detalle (foto, nombre, datos y botón) con `mainAxisSize: MainAxisSize.min`.           |
-| **5**  | **`Row`**                     | `character_detail_widget.dart`                                | Dispone horizontalmente los textos de género y especie del personaje con centrado.                                                        |
-| **6**  | **`Padding`**                 | `character_detail_widget.dart`                                | Proporciona un margen interior de 16 píxeles alrededor de la vista de detalle para separarla de los bordes.                               |
-| **7**  | **`SizedBox`**                | `character_detail_widget.dart`                                | Elemento espaciador fijo para crear distancias visuales limpias (16px vertical entre secciones y 10px horizontal entre género y especie). |
-| **8**  | **`Text`**                    | En todas las vistas                                           | Muestra textos aplicando estilos (`TextStyle`) con tipografía `StarJedi`, negritas, colores y traducciones al español.                    |
-| **9**  | **`Icon`**                    | `character_tile_widget.dart` / `character_detail_widget.dart` | Renderiza iconos del catálogo Material (`Icons.person` como avatar/fallback y `Icons.arrow_forward_ios` como flecha).                     |
-| **10** | **`ElevatedButton`**          | `home_screen.dart`                                            | Botón con relieve que devuelve al usuario desde el detalle a la lista principal (`personajeAPintar = -1`).                                |
+| # | Widget del Catálogo | Archivo donde se usa | Uso concreto en la pantalla |
+| :---: | :--- | :--- | :--- |
+| **1** | **`AppBar`** | `home_screen.dart` | Barra superior con fondo negro, elevación y título temático `"STAR WARS"` centrado con fuente `StarJedi`. |
+| **2** | **`SafeArea`** | `home_screen.dart` | Envuelve el cuerpo del `Scaffold` para proteger el contenido frente a barras de estado y *notches* del móvil. |
+| **3** | **`Image`** (`Image.network`) | `character_tile_widget.dart` / `character_detail_widget.dart` | Carga la foto del personaje desde la red con `BoxFit.cover` y control de imágenes caídas mediante `errorBuilder`. |
+| **4** | **`Column`** | `home_screen.dart` / `character_detail_widget.dart` | Organiza verticalmente los elementos del estado de error, de la vista de detalle y de cada indicador. |
+| **5** | **`Row`** | `character_detail_widget.dart` | Dispone horizontalmente el género y la especie, así como la fila con los 3 indicadores del personaje. |
+| **6** | **`Expanded`** | `character_detail_widget.dart` | Reparte el ancho disponible de la fila de indicadores en **3 partes iguales (1/3 cada uno)** para Altura, Peso y Planeta. |
+| **7** | **`Padding`** | `home_screen.dart` / `character_detail_widget.dart` | Añade margen interior de `16px` alrededor de la ficha del personaje y en la pantalla de error. |
+| **8** | **`SizedBox`** | `home_screen.dart` / `character_detail_widget.dart` | Espaciador vertical y horizontal para separar bloques visuales (`4px`, `8px`, `10px`, `16px`, `20px`). |
+| **9** | **`Text`** | En todas las vistas | Muestra títulos, nombres, géneros/especies traducidos, indicadores y mensajes de error con `TextStyle`. |
+| **10** | **`Icon`** | `home_screen.dart` / `character_tile_widget.dart` / `character_detail_widget.dart` | Muestra iconos Material: `Icons.error_outline` (error), `Icons.person` (fallback), `Icons.arrow_forward_ios` y los iconos de indicadores (`Icons.height`, `Icons.monitor_weight_outlined`, `Icons.public`). |
+| **11** | **`ElevatedButton`** | `home_screen.dart` | Botón `"Reintentar"` en el estado de error (vuelve a llamar a `cargarDatos()`) y botón `"Volver"` en la ficha de detalle. |
 
 ---
 
 ### 2. Estructuración del Layout de la Vista
 
-El diseño de la vista se estructura desde `HomeScreen` (`StatefulWidget`) apoyándose en widgets `StatelessWidget` puros (`CharacterTile` y `CharacterDetail`):
+El diseño se organiza desde `HomeScreen` (`StatefulWidget`), que gestiona la petición en `initState()` y los 3 estados, apoyándose en dos widgets `StatelessWidget` propios (`CharacterTile` y `CharacterDetail`):
 
 ```text
-MaterialApp (Configuración global)
+MaterialApp (Configuración global en main.dart)
  └── HomeScreen (StatefulWidget - Scaffold)
       ├── AppBar (Título "STAR WARS" con fuente StarJedi y color ámbar)
       └── body: SafeArea
            └── Center
-                └── FutureBuilder<List<Character>>
-                     ├── [Cargando] ➔ CircularProgressIndicator
-                     └── [Éxito]
-                          │
-                          ├── Si personajeAPintar == -1: VISTA LISTA
-                          │    └── ListView.builder
-                          │         └── GestureDetector (onTap -> cambia personajeAPintar)
-                          │              └── CharacterTile (StatelessWidget - ListTile)
-                          │                   ├── leading: Image.network / Icon(Icons.person)
-                          │                   ├── title: Text(nombre)
-                          │                   ├── subtitle: Text(género)
-                          │                   └── trailing: Icon(flecha)
-                          │
-                          └── Si personajeAPintar != -1: VISTA DETALLE
-                               └── Center
-                                    └── Column
-                                         ├── CharacterDetail (StatelessWidget)
-                                         │    └── Padding
-                                         │         └── Column (Vertical)
-                                         │              ├── Image.network (Foto grande)
-                                         │              ├── SizedBox (Separación)
-                                         │              ├── Text (Nombre en negrita)
-                                         │              ├── SizedBox (Separación)
-                                         │              └── Row (Horizontal: Género + Especie)
-                                         └── ElevatedButton ("Volver" -> personajeAPintar = -1)
+                ├── 1. [Si cargando == true]
+                │    └── CircularProgressIndicator
+                │
+                ├── 2. [Si error != null]
+                │    └── Padding (16px)
+                │         └── Column
+                │              ├── Icon(Icons.error_outline, color: Colors.red)
+                │              ├── SizedBox(height: 16)
+                │              ├── Text("No se han podido cargar los datos")
+                │              ├── SizedBox(height: 16)
+                │              └── ElevatedButton("Reintentar" -> llama a cargarDatos())
+                │
+                └── 3. [Con datos (cargando == false && error == null)]
+                     │
+                     ├── Si personajeAPintar == -1: VISTA LISTA
+                     │    └── ListView.builder
+                     │         └── GestureDetector (onTap -> personajeAPintar = index)
+                     │              └── CharacterTile (StatelessWidget - ListTile)
+                     │                   ├── leading: Image.network / Icon(Icons.person)
+                     │                   ├── title: Text(nombre)
+                     │                   ├── subtitle: Text(género traducido)
+                     │                   └── trailing: Icon(Icons.arrow_forward_ios)
+                     │
+                     └── Si personajeAPintar != -1: VISTA DETALLE (FICHA)
+                          └── Column
+                               ├── CharacterDetail (StatelessWidget)
+                               │    └── Padding (16px)
+                               │         └── Column
+                               │              ├── Image.network (Foto 250px)
+                               │              ├── SizedBox(height: 16)
+                               │              ├── Text (Nombre en 24px negrita)
+                               │              ├── SizedBox(height: 8)
+                               │              ├── Row (Género + SizedBox + Especie)
+                               │              ├── SizedBox(height: 20)
+                               │              └── Row (Indicadores de la ficha)
+                               │                   ├── Expanded -> Column (Icon + "Altura" + valor m)
+                               │                   ├── Expanded -> Column (Icon + "Peso" + valor kg)
+                               │                   └── Expanded -> Column (Icon + "Planeta" + valor)
+                               └── ElevatedButton ("Volver" -> personajeAPintar = -1)
 ```
-
-#### Funcionamiento del Layout:
-
-1. **Contenedor Principal (`HomeScreen`)**:
-   - `Scaffold` define la estructura fija: el `AppBar` superior con diseño temático y un `body` protegido por `SafeArea`.
-   - `FutureBuilder` se encarga de esperar los datos de `CharacterService.getAllCharacters()`. Mientras espera, centra un `CircularProgressIndicator`.
-2. **Layout de Lista (`personajeAPintar == -1`)**:
-   - El espacio se aprovecha con un `ListView.builder` que renderiza de forma eficiente cada fila envolviendo `CharacterTile` en un `GestureDetector`.
-   - `CharacterTile` (`StatelessWidget`) solo recibe el objeto `Character` y estructura el `ListTile`: imagen remota o icono (`Image.network` / `Icon`) a la izquierda, textos (`Text`) en el centro e icono de flecha (`Icon`) a la derecha.
-3. **Layout de Detalle (`personajeAPintar != -1`)**:
-   - Al pulsar un personaje en el `GestureDetector`, se actualiza el estado (`personajeAPintar = index; setState(() {})`).
-   - El layout muestra una `Column` centrada con el widget `CharacterDetail` (`StatelessWidget` que solo recibe el objeto `Character`) y debajo un `ElevatedButton("Volver")` que al pulsarse restablece `personajeAPintar = -1`.
 
 ---
 
-## 🌟 Características Principales
+## 🎤 Preguntas Clave para la Defensa Oral
 
-- **Consumo de API REST**: Descarga asíncrona de los personajes mediante el paquete `http` con control de estados HTTP.
-- **Manejo de Estados Asíncronos (`FutureBuilder`)**: Indicador de progreso (`CircularProgressIndicator`) y control de listas vacías.
-- **Estética Temática de Star Wars**: Barra superior (`AppBar`) estilizada con la tipografía oficial `StarJedi` y paleta de colores oscuro y amarillo ámbar.
-- **Listado Dinámico (`ListView.builder`)**:
-  - Miniatura del personaje con gestor de errores de red (`errorBuilder`).
-  - Nombre del personaje.
-  - Género traducido al español.
-  - Flecha indicadora de navegación.
-- **Ficha de Detalle Interactiva**:
-  - Imagen en alta resolución.
-  - Nombre en formato destacado.
-  - Género y especie traducidos al español.
-  - Botón de retorno al listado.
-- **Traducciones**: Módulo de traducción para normalizar valores en inglés a español (género y especie).
-- **Código Modularizado**: Componentes `StatelessWidget` separados de manera independiente dentro de la carpeta `widgets/`.
+1. **¿Por qué `HomeScreen` es `StatefulWidget` y no `StatelessWidget`?**  
+   Porque su contenido cambia a lo largo de la vida de la pantalla: empieza mostrando el estado de carga (`cargando = true`), luego cambia cuando llegan los datos de la API (`lista`) o si ocurre un fallo (`error`), y también cambia cuando el usuario pulsa un personaje para ver su ficha (`personajeAPintar`). En cambio, `CharacterTile` y `CharacterDetail` son `StatelessWidget` porque solo reciben un objeto `Character` ya construido y lo pintan sin modificar ningún estado interno.
+
+2. **¿Qué pasaría si quitas el `setState()`?**  
+   Las variables en memoria (`cargando`, `lista`, `error`, `personajeAPintar`) cambiarían su valor, pero Flutter no se enteraría de que tiene que volver a ejecutar el método `build()`. La pantalla se quedaría congelada eternamente en el estado inicial mostrando el `CircularProgressIndicator`.
+
+3. **¿Dónde se lanza la petición HTTP y por qué ahí (`initState` vs `build`)?**  
+   Se lanza dentro de `initState()` llamando a `cargarDatos()`. Se hace ahí porque `initState()` se ejecuta **una única vez** cuando el widget se crea e inserta en el árbol. Si pusiéramos la petición dentro de `build()`, cada vez que Flutter repintase la pantalla (por ejemplo, al hacer `setState`), se volvería a disparar la petición HTTP en bucle haciendo cientos de llamadas a la API.
+
+4. **¿Qué widget elegiste para repartir el espacio y por qué ese?**  
+   Elegí `Expanded` dentro de la fila (`Row`) de los tres indicadores de la ficha (`character_detail_widget.dart`: Altura, Peso y Planeta). Al envolver cada una de las 3 columnas en un `Expanded`, obligamos a Flutter a repartir el ancho disponible de la fila en **3 partes iguales (1/3 para cada indicador)**, adaptándose a cualquier ancho de móvil y evitando que un nombre de planeta largo provoque un desbordamiento (*overflow*).
+
+5. **¿Cómo se provoca y gestiona el estado de error?**  
+   En `CharacterService.getAllCharacters()` comprobamos `if (response.statusCode != 200)` antes de decodificar el JSON y lanzamos una excepción. En `HomeScreen.cargarDatos()`, envolvemos la llamada en un bloque `try / catch`: si la URL está mal escrita (por ejemplo, cambiando `all.json` por `all_error.json`) o no hay conexión, entra en el `catch`, asigna `error = 'No se han podido cargar los datos'` y `cargando = false` dentro de `setState()`, mostrando el aviso con el botón **Reintentar**.
 
 ---
 
 ## 📁 Estructura del Proyecto (`lib/`)
 
-El código fuente sigue la convención de nomenclatura `nombre_[nombre_carpeta].dart`:
+El código fuente sigue la organización por capas y la convención de nombres `nombre_[nombre_carpeta].dart`:
 
 ```text
 lib/
-├── main.dart                               # Punto de entrada de la aplicación
+├── main.dart                               # Punto de entrada (MaterialApp)
 ├── models/
-│   └── character_model.dart                # Modelo de datos y mapeo JSON
+│   └── character_model.dart                # Clase Character con su factory Character.fromJson
 ├── services/
-│   └── character_service.dart              # Peticiones HTTP a la API de Star Wars
+│   └── character_service.dart              # Petición HTTP con paquete http y control de statusCode
 ├── presentation/
 │   ├── screens/
-│   │   └── home_screen.dart                # Pantalla principal (StatefulWidget: AppBar + FutureBuilder)
+│   │   └── home_screen.dart                # Pantalla principal (StatefulWidget: initState, setState y 3 estados)
 │   └── widgets/
-│       ├── character_tile_widget.dart      # Item individual de la lista (StatelessWidget)
-│       └── character_detail_widget.dart    # Vista de detalle de un personaje (StatelessWidget)
+│       ├── character_tile_widget.dart      # Fila individual del listado (StatelessWidget)
+│       └── character_detail_widget.dart    # Ficha de detalle con datos e indicadores (StatelessWidget)
 └── utils/
-    └── traducciones_utils.dart             # Utilidades de traducción de términos
+    └── traducciones_utils.dart             # Funciones auxiliares de traducción al español
 ```
+
+---
+
+## 📥 Guía Paso a Paso: Descargar desde GitHub y arrancar el proyecto
+
+### Paso 1: Descargar el proyecto desde GitHub
+1. Entra en el enlace del repositorio en tu navegador web.
+2. Haz clic en el botón verde **`<> Code`** y selecciona **`Download ZIP`**.
+3. Extrae el archivo `.zip` en tu ordenador.
+
+### Paso 2: Abrir en Visual Studio Code y descargar paquetes
+1. Abre **Visual Studio Code** y selecciona **`Archivo` ➔ `Abrir carpeta...`** eligiendo la carpeta `practica_obligatoria`.
+2. Cuando aparezca el aviso para instalar paquetes, pulsa **`Get Packages`** (o abre `pubspec.yaml` y pulsa el icono de descarga arriba a la derecha).
+
+### Paso 3: Ejecutar en el emulador
+1. Selecciona tu emulador Android o dispositivo en la esquina inferior derecha de la barra de estado de VS Code.
+2. Pulsa **`F5`** (o **`Ejecutar` ➔ `Iniciar depuración`**) para compilar y lanzar la aplicación.
 
 ---
 
 ## 🛠️ Tecnologías y Dependencias
 
-- **Flutter SDK**: `>=3.13.3`
-- **Dart SDK**
+- **Flutter SDK**: `^3.10.0`
 - **Dependencias**:
-  - [`http`](https://pub.dev/packages/http): Cliente HTTP para peticiones REST.
-  - [`google_fonts`](https://pub.dev/packages/google_fonts): Tipografías de Google.
-- **Recursos locales**:
-  - `assets/fonts/Starjedi.ttf`: Fuente Star Wars configurada en `pubspec.yaml`.
-
----
-
-## 🔧 Solución de Problemas Frecuentes
-
-1. **Si no se descargan las librerías**:
-   Abre el archivo `pubspec.yaml` en VS Code, haz un pequeño cambio (como poner un espacio y borrarlo), guarda con `Ctrl + S` y VS Code descargará automáticamente los paquetes.
-2. **Si la fuente temática `StarJedi` no se muestra**:
-   Detén la ejecución con el botón cuadrado rojo de la barra de depuración y vuelve a pulsar `F5` para que se vuelva a empaquetar la carpeta de assets.
-3. **Si el emulador no aparece en el listado**:
-   Abre Android Studio ➔ ve a _Virtual Device Manager_ ➔ pulsa el botón de _Play_ en tu emulador para encenderlo antes de pulsar `F5` en VS Code.
+  - [`http`](https://pub.dev/packages/http): Peticiones HTTP a la API REST.
+- **Recursos locales (`assets/`)**:
+  - `assets/fonts/Starjedi.ttf`: Fuente temática configurada en `pubspec.yaml`.
 
 ---
 

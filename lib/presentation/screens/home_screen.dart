@@ -4,7 +4,7 @@ import 'package:practica_obligatoria/presentation/widgets/character_detail_widge
 import 'package:practica_obligatoria/presentation/widgets/character_tile_widget.dart';
 import 'package:practica_obligatoria/services/character_service.dart';
 
-// Pantalla principal con estado (StatefulWidget) para gestionar qué personaje se muestra
+// Pantalla principal con estado (StatefulWidget) para gestionar los 3 estados y el personaje seleccionado
 class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
 
@@ -13,12 +13,40 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  // Variables para los 3 estados de la pantalla: cargando, con datos y error
+  List<Character> lista = [];
+  bool cargando = true;
+  String? error;
+
   // Índice del personaje seleccionado (-1 indica que se muestra la lista completa)
   int personajeAPintar = -1;
 
-  // Guardamos la petición futura para no volver a descargar los datos al usar setState
-  final Future<List<Character>> futurePersonajes =
-      CharacterService.getAllCharacters();
+  // initState se ejecuta una sola vez al crear la pantalla y lanza la petición HTTP
+  @override
+  void initState() {
+    super.initState();
+    cargarDatos();
+  }
+
+  // Método asíncrono que pide los datos al servicio y controla posibles fallos con try/catch
+  Future<void> cargarDatos() async {
+    setState(() {
+      cargando = true;
+      error = null;
+    });
+    try {
+      final resultado = await CharacterService.getAllCharacters();
+      setState(() {
+        lista = resultado;
+        cargando = false;
+      });
+    } catch (e) {
+      setState(() {
+        error = 'No se han podido cargar los datos';
+        cargando = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,55 +68,54 @@ class _HomeScreenState extends State<HomeScreen> {
       // [SafeArea]: Asegura que el contenido respete las zonas seguras del dispositivo
       body: SafeArea(
         child: Center(
-          // FutureBuilder escucha el estado de la petición asíncrona a la API
-          child: FutureBuilder<List<Character>>(
-            future: futurePersonajes,
-            builder: (context, snapshot) {
-              // Mientras la petición está en curso, mostramos un indicador de carga
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
-              }
-
-              // Obtenemos los personajes recibidos
-              final lista = snapshot.data ?? [];
-
-              // Si la respuesta llegó vacía
-              if (lista.isEmpty) {
-                return Text('La lista llegó vacía');
-              }
-
-              // Si no hay personaje seleccionado (-1), mostramos la lista; si no, mostramos el detalle
-              return (personajeAPintar == -1)
-                  ? ListView.builder(
-                      itemCount: lista.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return GestureDetector(
-                          onTap: () {
-                            personajeAPintar = index;
-                            setState(() {});
+          child: cargando
+              // 1. Estado CARGANDO: muestra el indicador de progreso
+              ? CircularProgressIndicator()
+              : (error != null)
+                  // 2. Estado ERROR: muestra mensaje claro y botón para reintentar
+                  ? Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.error_outline, size: 60, color: Colors.red),
+                        SizedBox(height: 16),
+                        Text(error!),
+                        SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: () {
+                            cargarDatos();
                           },
-                          child: CharacterTile(character: lista[index]),
-                        );
-                      },
+                          child: Text('Reintentar'),
+                        ),
+                      ],
                     )
-                  : Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          CharacterDetail(character: lista[personajeAPintar]),
-                          // [ElevatedButton]: Botón para volver a la lista principal
-                          ElevatedButton(
-                            onPressed: () {
-                              personajeAPintar = -1;
-                              setState(() {});
-                            },
-                            child: Text('Volver'),
-                          ),
-                        ],
-                      ),
-                    );
-            },
-          ),
+                  // 3. Estado CON DATOS: muestra la lista de personajes o el detalle del seleccionado
+                  : (personajeAPintar == -1)
+                      ? ListView.builder(
+                          itemCount: lista.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return GestureDetector(
+                              onTap: () {
+                                personajeAPintar = index;
+                                setState(() {});
+                              },
+                              child: CharacterTile(character: lista[index]),
+                            );
+                          },
+                        )
+                      : Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CharacterDetail(character: lista[personajeAPintar]),
+                            // [ElevatedButton]: Botón para volver a la lista principal
+                            ElevatedButton(
+                              onPressed: () {
+                                personajeAPintar = -1;
+                                setState(() {});
+                              },
+                              child: Text('Volver'),
+                            ),
+                          ],
+                        ),
         ),
       ),
     );
