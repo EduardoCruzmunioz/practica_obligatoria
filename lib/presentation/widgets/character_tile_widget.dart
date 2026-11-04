@@ -14,28 +14,17 @@ class CharacterTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      // [CircleAvatar]: Contenedor circular temático del avatar
-      leading: CircleAvatar(
-        backgroundColor: Color.fromARGB(50, 255, 193, 7),
-        child: ClipOval(
-          child: character.image.isNotEmpty
-              ? Image.network(
-                  character.image,
-                  width: 40,
-                  height: 40,
-                  fit: BoxFit.cover,
-                  // Headers con User-Agent para evitar que servidores como Wikia/Cloudflare devuelvan error 403 Forbidden
-                  headers: {
-                    'User-Agent':
-                        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-                  },
-                  // Manejo de errores: si la imagen remota falla o da 403/404, mostramos el icono por defecto sin romper la interfaz
-                  errorBuilder: (context, error, stackTrace) =>
-                      Icon(Icons.person, color: Colors.amber),
-                )
-              : Icon(Icons.person, color: Colors.amber),
-        ),
-      ),
+      // [Image] / [Icon]: Imagen del personaje sin fondo circular; si falla o no tiene, muestra el icono por defecto
+      leading: character.image.isNotEmpty
+          ? Image.network(
+              character.image,
+              width: 50,
+              height: 50,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) =>
+                  Icon(Icons.person),
+            )
+          : Icon(Icons.person),
       // [Text]: Nombre del personaje
       title: Text(character.name),
       // [Text]: Género del personaje traducido al español

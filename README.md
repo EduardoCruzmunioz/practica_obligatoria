@@ -105,7 +105,7 @@ Se han seleccionado e integrado **12 widgets distintos** del catálogo oficial d
 | :----: | :---------------------------- | :------------------------------------------------------------ | :---------------------------------------------------------------------------------------------------------------------------------------- |
 | **1**  | **`AppBar`**                  | `home_screen.dart`                                            | Barra de navegación superior con fondo negro, elevación y título temático de Star Wars centrado.                                          |
 | **2**  | **`SafeArea`**                | `home_screen.dart`                                            | Envuelve el cuerpo del `Scaffold` para proteger el layout frente a barras de estado y _notches_ del dispositivo móvil.                    |
-| **3**  | **`CircleAvatar`**            | `character_tile_widget.dart`                                  | Muestra la miniatura redondeada de cada personaje en la lista (`ListTile`) o un icono por defecto si no tiene imagen.                     |
+| **3**  | **`Image`** (`Image.network`) | `character_tile_widget.dart` / `character_detail_widget.dart` | Carga de imagen remota con tamaño controlado, recorte `BoxFit.cover` y control de fallos mediante `errorBuilder`.                         |
 | **4**  | **`IconButton`**              | `character_tile_widget.dart`                                  | Botón interactivo con icono de flecha (`trailing`) que activa la navegación al detalle del personaje.                                     |
 | **5**  | **`Container`**               | `character_detail_widget.dart`                                | Delimita la ficha o tarjeta visual del personaje con esquinas redondeadas (`borderRadius: 16`), borde ámbar y fondo suavizado.            |
 | **6**  | **`Column`**                  | `character_detail_widget.dart`                                | Organiza verticalmente los elementos de la vista de detalle (foto, nombre, datos y botón) con `mainAxisSize: MainAxisSize.min`.           |
@@ -113,9 +113,8 @@ Se han seleccionado e integrado **12 widgets distintos** del catálogo oficial d
 | **8**  | **`Padding`**                 | `character_detail_widget.dart`                                | Proporciona un margen interior de 16 píxeles alrededor de la tarjeta para que no colapse contra los bordes de la pantalla.                |
 | **9**  | **`SizedBox`**                | `character_detail_widget.dart`                                | Elemento espaciador fijo para crear distancias visuales limpias (16px vertical entre secciones y 10px horizontal entre género y especie). |
 | **10** | **`Text`**                    | En todas las vistas                                           | Muestra textos aplicando estilos (`TextStyle`) con tipografía `StarJedi`, negritas, colores y traducciones al español.                    |
-| **11** | **`Image`** (`Image.network`) | `character_detail_widget.dart`                                | Carga la imagen remota a 250px de altura con recorte `BoxFit.cover` y control de fallos mediante `errorBuilder`.                          |
-| **12** | **`Icon`**                    | `character_tile_widget.dart` / `character_detail_widget.dart` | Renderiza iconos del catálogo Material (`Icons.person` como avatar/fallback y `Icons.arrow_forward_ios` como flecha).                     |
-| **13** | **`ElevatedButton`**          | `character_detail_widget.dart`                                | Botón con relieve que invoca el callback `onBack` para devolver al usuario desde el detalle a la lista principal.                         |
+| **11** | **`Icon`**                    | `character_tile_widget.dart` / `character_detail_widget.dart` | Renderiza iconos del catálogo Material (`Icons.person` como avatar/fallback y `Icons.arrow_forward_ios` como flecha).                     |
+| **12** | **`ElevatedButton`**          | `character_detail_widget.dart`                                | Botón con relieve que invoca el callback `onBack` para devolver al usuario desde el detalle a la lista principal.                         |
 
 ---
 
@@ -137,7 +136,7 @@ MaterialApp (Configuración global)
                                          ├── Si personajeAPintar == -1: VISTA LISTA
                                          │    └── ListView.builder
                                          │         └── CharacterTile (ListTile)
-                                         │              ├── leading: CircleAvatar
+                                         │              ├── leading: Image.network / Icon(Icons.person)
                                          │              ├── title: Text(nombre)
                                          │              ├── subtitle: Text(género)
                                          │              └── trailing: IconButton(Icon(flecha))
@@ -164,7 +163,7 @@ MaterialApp (Configuración global)
    - `FutureBuilder` se encarga de esperar los datos de `CharacterService.getAllCharacters()`. Mientras espera, centra un `CircularProgressIndicator`.
 2. **Layout de Lista (`CharacterList` con `personajeAPintar == -1`)**:
    - El espacio se aprovecha con un `ListView.builder` que renderiza de forma eficiente y bajo demanda cada `CharacterTile`.
-   - Cada fila utiliza `ListTile` estructurando: avatar circular (`CircleAvatar`) a la izquierda, textos (`Text`) en el centro y botón con icono (`IconButton`) a la derecha.
+   - Cada fila utiliza `ListTile` estructurando: imagen remota o icono (`Image.network` / `Icon`) a la izquierda, textos (`Text`) en el centro y botón con icono (`IconButton`) a la derecha.
 3. **Layout de Detalle (`CharacterList` con `personajeAPintar != -1`)**:
    - Al pulsar un personaje, se actualiza el estado (`personajeAPintar = index; setState()`).
    - El layout cambia automáticamente a una tarjeta centrada (`Center` ➔ `Padding` ➔ `Container`).
