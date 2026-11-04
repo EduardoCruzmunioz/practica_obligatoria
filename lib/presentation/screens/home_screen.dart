@@ -10,7 +10,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Barra superior estándar de Flutter (sin necesidad de PreferredSizeWidget personalizado)
+      // [AppBar]: Barra superior temática personalizada de Star Wars
       appBar: AppBar(
         title: Text(
           'STAR WARS',
@@ -24,37 +24,40 @@ class HomeScreen extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Color.fromARGB(255, 0, 0, 0),
       ),
-      body: Center(
-        // FutureBuilder escucha el estado de la petición asíncrona a la API
-        child: FutureBuilder<List<Character>>(
-          future: CharacterService.getAllCharacters(),
-          builder: (context, snapshot) {
-            // Mientras la petición está en curso, mostramos un indicador de carga
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
-            }
+      // [SafeArea]: Asegura que el contenido respete las zonas seguras del dispositivo (notch, barra de estado)
+      body: SafeArea(
+        child: Center(
+          // FutureBuilder escucha el estado de la petición asíncrona a la API
+          child: FutureBuilder<List<Character>>(
+            future: CharacterService.getAllCharacters(),
+            builder: (context, snapshot) {
+              // Mientras la petición está en curso, mostramos un indicador de carga
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              }
 
-            // Si ocurrió un error en la llamada HTTP, lo mostramos en pantalla
-            if (snapshot.hasError) {
-              debugPrint('ERROR: ${snapshot.error}');
-              debugPrint('STACK: ${snapshot.stackTrace}');
-              return Padding(
-                padding: EdgeInsets.all(16),
-                child: Text('Error: ${snapshot.error}'),
-              );
-            }
+              // Si ocurrió un error en la llamada HTTP, lo mostramos en pantalla
+              if (snapshot.hasError) {
+                debugPrint('ERROR: ${snapshot.error}');
+                debugPrint('STACK: ${snapshot.stackTrace}');
+                return Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Text('Error: ${snapshot.error}'),
+                );
+              }
 
-            // Obtenemos los personajes recibidos
-            final lista = snapshot.data ?? [];
+              // Obtenemos los personajes recibidos
+              final lista = snapshot.data ?? [];
 
-            // Si la respuesta llegó vacía
-            if (lista.isEmpty) {
-              return Text('La lista llegó vacía');
-            }
+              // Si la respuesta llegó vacía
+              if (lista.isEmpty) {
+                return Text('La lista llegó vacía');
+              }
 
-            // Pintamos la lista de personajes utilizando nuestro widget modularizado
-            return CharacterList(personajes: lista);
-          },
+              // Pintamos la lista de personajes utilizando nuestro widget modularizado
+              return CharacterList(personajes: lista);
+            },
+          ),
         ),
       ),
     );

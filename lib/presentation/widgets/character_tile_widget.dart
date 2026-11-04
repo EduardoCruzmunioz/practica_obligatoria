@@ -14,23 +14,22 @@ class CharacterTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      // Imagen o avatar del personaje; si falla la carga o está vacía, muestra un icono por defecto
-      leading: character.image.isNotEmpty
-          ? Image.network(
-              character.image,
-              width: 50,
-              height: 50,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) => Icon(Icons.person),
-            )
-          : Icon(Icons.person),
-      // Nombre del personaje
+      // [CircleAvatar]: Muestra el avatar redondeado del personaje o un icono por defecto
+      leading: CircleAvatar(
+        backgroundColor: Color.fromARGB(50, 255, 193, 7),
+        backgroundImage: character.image.isNotEmpty ? NetworkImage(character.image) : null,
+        child: character.image.isEmpty ? Icon(Icons.person, color: Colors.amber) : null,
+      ),
+      // [Text]: Nombre del personaje
       title: Text(character.name),
-      // Género del personaje traducido
+      // [Text]: Género del personaje traducido al español
       subtitle: Text(traducirGenero(character.gender), maxLines: 1),
-      // Flecha indicativa de navegación a la derecha
-      trailing: Icon(Icons.arrow_forward_ios),
-      // Al pulsar, se invoca el callback onTap recibido por parámetro
+      // [IconButton] e [Icon]: Botón interactivo con icono de flecha
+      trailing: IconButton(
+        icon: Icon(Icons.arrow_forward_ios, size: 16),
+        onPressed: onTap,
+      ),
+      // Al pulsar la fila completa también se abre la vista de detalle
       onTap: onTap,
     );
   }
